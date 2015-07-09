@@ -6,6 +6,8 @@ import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import java.util.Set;
+import java.util.HashSet;
 
 
 /**
@@ -16,6 +18,15 @@ public class DSL extends Activity implements GestureDetector.OnGestureListener,
     private State currentState;
     private static final String DEBUG_TAG = "Gestures";
     private GestureDetectorCompat mDetector;
+
+    private void transition(Set<State> targets) {
+        if (targets.size() == 1) {
+            currentState = targets.iterator().next();
+        } else {
+            // PANIC!
+        }
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event){
         int action = MotionEventCompat.getActionMasked(event);
@@ -26,7 +37,12 @@ public class DSL extends Activity implements GestureDetector.OnGestureListener,
     @Override
     public boolean onDown(MotionEvent event) {
         Log.d(DEBUG_TAG, "onDown: " + event.toString());
-        
+        Set<State> nextStates = new HashSet<State>();
+        for (Transition t : currentState.getTransitions()) {
+            if(t.transitionOnDown(event)) {
+                nextStates.add(t.getDestination());
+            }
+        }
         return true;
     }
 

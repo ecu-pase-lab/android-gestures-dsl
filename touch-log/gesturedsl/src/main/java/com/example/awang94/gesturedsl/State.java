@@ -3,6 +3,7 @@ package com.example.awang94.gesturedsl;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by awang94 on 7/6/2015.
@@ -11,7 +12,8 @@ public class State {
     private static int idcount = 0;
     ArrayList<Transition> transList = new ArrayList<Transition>();
     int id;
-    public State()  {
+    public State
+            ()  {
         id = ++idcount;
     }
     public void addTransition(Transition trans) {
@@ -28,5 +30,8 @@ public class State {
         return null;
     }
 
+    public List<Transition> getTransitions() {
+        return transList;
+    }
 
 }
