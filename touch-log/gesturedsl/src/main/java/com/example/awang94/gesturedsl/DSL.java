@@ -6,22 +6,28 @@ import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+
+import com.example.awang94.gesturedsl.Transitions.Transition;
+
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
-
 
 /**
  * Created by awang94 on 7/6/2015.
  */
 public class DSL extends Activity implements GestureDetector.OnGestureListener,
         GestureDetector.OnDoubleTapListener {
-    private State currentState;
+    private ArrayList<State> currentStates;
     private static final String DEBUG_TAG = "Gestures";
     private GestureDetectorCompat mDetector;
+    public void addGesture(Gesture gest)  {
+        currentStates.add(gest);
+    }
 
     private void transition(Set<State> targets) {
         if (targets.size() == 1) {
-            currentState = targets.iterator().next();
+            currentStates.add(targets.iterator().next());
         } else {
             // PANIC!
         }
@@ -31,17 +37,34 @@ public class DSL extends Activity implements GestureDetector.OnGestureListener,
     public boolean onTouchEvent(MotionEvent event){
         int action = MotionEventCompat.getActionMasked(event);
         this.mDetector.onTouchEvent(event);
-        currentState.pushState(action);
+        if (action == MotionEvent.ACTION_UP) {
+            for (State currentState: currentStates) {
+                Set<State> nextStates = new HashSet<State>();
+                for (Transition t : currentState.getTransitions()) {
+                    if (t.transitionOnUp(event)) {
+                        nextStates.add(t.getDestination());
+                    }
+                }
+                currentStates.remove(currentState);
+                transition(nextStates);
+                nextStates.clear();
+            }
+        }
         return super.onTouchEvent(event);
     }
     @Override
     public boolean onDown(MotionEvent event) {
         Log.d(DEBUG_TAG, "onDown: " + event.toString());
         Set<State> nextStates = new HashSet<State>();
-        for (Transition t : currentState.getTransitions()) {
-            if(t.transitionOnDown(event)) {
-                nextStates.add(t.getDestination());
+        for (State currentState: currentStates) {
+            for (Transition t : currentState.getTransitions()) {
+                if (t.transitionOnDown(event)) {
+                    nextStates.add(t.getDestination());
+                }
             }
+            currentStates.remove(currentState);
+            transition(nextStates);
+            nextStates.clear();
         }
         return true;
     }

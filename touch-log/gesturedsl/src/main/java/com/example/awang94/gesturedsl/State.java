@@ -1,37 +1,46 @@
 package com.example.awang94.gesturedsl;
 
-import android.view.MotionEvent;
+import com.example.awang94.gesturedsl.Transitions.Transition;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by awang94 on 7/6/2015.
  */
 public class State {
-    private static int idcount = 0;
-    ArrayList<Transition> transList = new ArrayList<Transition>();
+    private static int idCount = 0;
+    boolean acceptingState;
+    State parentState;
+    ArrayList<Transition> transList;
+    Transition transition;
     int id;
-    public State
-            ()  {
-        id = ++idcount;
+    public State()  {
+        id = ++idCount;
+        transList = new ArrayList<Transition>();
+        acceptingState = false;
     }
     public void addTransition(Transition trans) {
         transList.add(trans);
     }
-    public void pushState(MotionEvent event)  {
-
+    public ArrayList<Transition> getTransitions()  {  return transList;  }
+    public boolean isAcceptingState() {
+        return acceptingState;
     }
-    public State pushState(int action)  {
-        for (int i = 0; i < transList.size(); i++)  {
-            Transition trans = transList.get(i);
-            if (action == trans.getSymbol()) return trans.getDestination();
+    public void setAcceptingState(boolean b)  {
+        acceptingState = b;
+    }
+    public void setParentState(State s) {
+        parentState = s;
+    }
+    public State getParentState()  {
+        return parentState;
+    }
+    public State getRootState(State s)  {
+        State rootState = s;
+        while(rootState.getParentState() != null)  {
+            rootState = rootState.getParentState();
         }
-        return null;
-    }
-
-    public List<Transition> getTransitions() {
-        return transList;
+        return rootState;
     }
 
 }

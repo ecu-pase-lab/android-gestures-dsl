@@ -13,10 +13,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.text.method.ScrollingMovementMethod;
+import com.example.awang94.gesturedsl.*;
 
 
-public class MainActivity extends Activity implements GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener {
+public class MainActivity extends DSL {
     private TextView mTextView;
     private TextView gTextView;
     private GestureDetectorCompat mDetector;
@@ -26,6 +26,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        addGesture(new PressGesture());
         mTextView = (TextView) findViewById(R.id.touch_view);
         mTextView.setMovementMethod(new ScrollingMovementMethod());
         gTextView = (TextView) findViewById(R.id.gest_view);
