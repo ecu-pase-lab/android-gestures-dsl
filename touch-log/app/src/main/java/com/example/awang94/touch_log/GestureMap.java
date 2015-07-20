@@ -1,7 +1,6 @@
 package com.example.awang94.touch_log;
 
 import android.util.Log;
-
 import java.util.ArrayList;
 
 /**

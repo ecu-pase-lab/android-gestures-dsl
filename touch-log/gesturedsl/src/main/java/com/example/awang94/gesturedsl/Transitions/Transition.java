@@ -11,7 +11,7 @@ import com.example.awang94.gesturedsl.State;
 public class Transition {
     State s1 = null, s2 = null;
     int symbol;
-    boolean directional = false, positional = false, timed = false;
+    boolean directional = false, positional = false, timed = false; //flags for additional qualities/requirements of the gesture
     Direction direction;
     public Transition(State s1, State s2)  {
         this.s1 = s1;
@@ -20,14 +20,38 @@ public class Transition {
     public Transition()  {}
 
 
-    public Transition startsWith(State s1) {
-        this.s1 = s1;
-        return this;
-    }
+    public static double angle(float dx, float dy) {
+        double slope, angle;
+        if (dx == 0) { //in case the slope is undefined.
+            if (dy < 0)
 
-    public Transition endsAt(State s2) {
-        this.s2 = s2;
-        return this;
+                return 270;
+            else
+                return 90;
+        }
+        slope = -dy / dx;
+        angle = (180 / Math.PI) * (Math.atan(slope));
+        //System.out.println(angle);
+        if (angle >= 0 && dx > 0)
+            angle += 180;
+        if (angle < 0 && dx < 0) {
+            angle += 360;
+        }
+        if (angle < 0 && dx > 0)  {
+            angle += 180;
+        }
+        return angle;
+    }
+    public boolean withinRange(float value, float center, float range)  { //checks if value is within range of center.
+        float upper, lower;
+        upper = (center + range) % 360;
+        lower = (center - range) % 360;
+        if (value < upper && value > lower)  {
+            System.out.println(value +  " is within " + lower + " and " + upper);
+            return true;
+        }
+        else
+            return false;
     }
 
     public State getDestination()  {
@@ -37,9 +61,9 @@ public class Transition {
         return s1;
     }
 
-    public void setDirection(Direction d)  {
-        direction = d;
-        directional = true;
+    public void setDirection(Direction d)  { //called by DSL when gesture needs to move a specific direction
+        this.direction = d;
+        this.directional = true;
     }
 
     public boolean transitionOnTouchEvent(MotionEvent event){

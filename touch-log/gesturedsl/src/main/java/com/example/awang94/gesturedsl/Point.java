@@ -1,7 +1,7 @@
-package com.example.awang94.touch_log;
+package com.example.awang94.gesturedsl;
 
 /**
- * Created by awang94 on 7/16/2015.
+ * Created by awang94 on 6/30/2015.
  */
 public class Point {
     public int x;

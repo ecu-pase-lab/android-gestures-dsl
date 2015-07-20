@@ -14,11 +14,14 @@ public class State {
     ArrayList<Transition> transList;
     Transition transition;
     int id;
+    Point coord;
     public State()  {
         id = ++idCount;
         transList = new ArrayList<Transition>();
         acceptingState = false;
     }
+    public void setCoord(Point p) {coord = p;}
+    public Point getCoord()  {return coord;}
     public void addTransition(Transition trans) {
         transList.add(trans);
     }
@@ -42,5 +45,6 @@ public class State {
         }
         return rootState;
     }
+
 
 }

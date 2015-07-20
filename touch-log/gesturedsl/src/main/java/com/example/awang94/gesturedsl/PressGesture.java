@@ -6,5 +6,10 @@ package com.example.awang94.gesturedsl;
 public class PressGesture extends Gesture {
     public PressGesture()  {
         this.beginsWith().touchDown().then().touchUp().end();
+/*        behavior = new Behavior()  {
+            public void execute()  {
+                System.out.println("accepted state");
+            }
+        };*/
     }
 }

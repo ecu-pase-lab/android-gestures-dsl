@@ -14,6 +14,34 @@ public class ScrollTransition extends Transition {
     @Override
     public boolean transitionOnScroll(MotionEvent e1, MotionEvent e2, float distanceX,
                                       float distanceY) {
+        if (directional)  {
+           //System.out.println("dx:" + distanceX + "dy:" + distanceY);
+            System.out.println(angle(distanceX, distanceY));
+            switch (direction) {
+                case LEFT:
+                    if (withinRange((float) angle(distanceX, distanceY), 180, 30)) {
+                        System.out.println("check left");
+                        return true;
+                    }
+                    else
+                        return false;
+                case RIGHT:
+                    if (withinRange((float) angle(distanceX, distanceY), 0, 30))
+                        return true;
+                    else
+                        return false;
+                case UP:
+                    if (withinRange((float) angle(distanceX, distanceY), 90, 30))
+                        return true;
+                    else
+                        return false;
+                case DOWN:
+                    if (withinRange((float) angle(distanceX, distanceY), 270, 30))
+                        return true;
+                    else
+                        return false;
+            }
+        }
         return true;
     }
 
